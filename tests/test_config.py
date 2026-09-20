@@ -45,3 +45,23 @@ def test_model_overrides_are_loaded(monkeypatch: pytest.MonkeyPatch) -> None:
         "hi-IN",
         "test-speaker",
     )
+
+
+def test_retrieval_and_token_settings(monkeypatch):
+    monkeypatch.setenv('OPENAI_API_KEY', 'test')
+    monkeypatch.setenv('SARVAM_API_KEY', 'test')
+    monkeypatch.setenv('TAVILY_API_KEY', 'your-placeholder')
+    monkeypatch.setenv('INDIAN_KANOON_API_TOKEN', 'token')
+    monkeypatch.setenv('AGENT_MAX_OUTPUT_TOKENS', '600')
+    assert Settings.from_env().tavily_api_key is None
+    assert Settings.from_env().indian_kanoon_api_token == 'token'
+    assert Settings.from_env().max_output_tokens == 600
+
+
+@pytest.mark.parametrize('value', ['0', 'abc', '4097'])
+def test_bad_token_budget(monkeypatch, value):
+    monkeypatch.setenv('OPENAI_API_KEY', 'test')
+    monkeypatch.setenv('SARVAM_API_KEY', 'test')
+    monkeypatch.setenv('AGENT_MAX_OUTPUT_TOKENS', value)
+    with pytest.raises(ConfigurationError, match='AGENT_MAX_OUTPUT_TOKENS'):
+        Settings.from_env()

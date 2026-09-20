@@ -17,9 +17,9 @@ async def entrypoint(ctx: agents.JobContext) -> None:
     await ctx.connect()
 
     session = build_session(settings)
-    await session.start(room=ctx.room, agent=VoiceAssistant(settings.instructions))
+    await session.start(room=ctx.room, agent=VoiceAssistant(settings, room=ctx.room))
     await session.generate_reply(
-        instructions="Greet the user warmly and offer your help."
+        instructions="Greet briefly in Hindi and English: नमस्ते! Hello! Ask which cooperative or farming topic the user needs help with."
     )
 
 

@@ -2537,6 +2537,7 @@ name = "sih-voice-agent"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "httpx" },
     { name = "livekit-agents", extra = ["openai", "sarvam", "silero"] },
     { name = "python-dotenv" },
 ]
@@ -2548,6 +2549,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "httpx", specifier = ">=0.28,<1" },
     { name = "livekit-agents", extras = ["openai", "sarvam", "silero"], specifier = "~=1.8" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
 ]
