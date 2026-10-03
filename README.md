@@ -126,6 +126,17 @@ to whichever turn is currently visible. Publication errors do not discard the
 evidence available to the agent. Console mode does not need a source consumer.
 No frontend or token-issuing HTTP service is included.
 
+### Edge Device and Audio Replay Integration
+
+To prevent awkward silence during slow information retrieval (like web scraping), the agent automatically uses **Filler Voice** ("Let me check that for you...") seamlessly localized in English and Hindi.
+
+For devices without full graphical chat interfaces (e.g., edge devices with a "Replay" button), the backend exposes two LiveKit Remote Procedure Call (RPC) methods for response stacking and replay:
+
+- **`get_responses`**: Returns a JSON string containing the full stack of recent assistant text responses `{"responses": ["..."]}`.
+- **`replay_last`**: Synthesizes and plays the very last response from the assistant, and returns a JSON payload indicating it started playing `{"status": "replaying", "text": "..."}`.
+
+Edge devices can trigger these methods using the LiveKit Client SDK's `performRpc` method targeted at the server participant.
+
 ## Acceptance checks
 
 Offline checks (mocked HTTP and speech controls, no paid API calls):

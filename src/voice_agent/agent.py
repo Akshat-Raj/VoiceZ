@@ -1,4 +1,5 @@
 import json
+import random
 from typing import Literal
 
 from livekit.agents import Agent, AgentSession, RunContext, function_tool
@@ -27,6 +28,16 @@ class VoiceAssistant(Agent):
         handle = context.speech_handle
         if handle.interrupted:
             return {"status": "interrupted", "sources": []}
+        
+        hi_fillers = ["मुझे इसके बारे में देखने दीजिए...", "मैं अभी चेक कर रहा हूँ...", "ज़रा रुकिए, मैं जानकारी निकालता हूँ..."]
+        en_fillers = ["Let me check that for you...", "Just a moment, I'm looking that up...", "Let me find the details on that..."]
+        filler_text = random.choice(hi_fillers) if self.language == "hi-IN" else random.choice(en_fillers)
+        
+        try:
+            context.session.say(filler_text, add_to_chat_ctx=False)
+        except Exception:
+            pass # Ignore if say is not available or errors out
+
         try:
             payload = await operation(*args)
         except ValueError:
